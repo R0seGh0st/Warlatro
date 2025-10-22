@@ -24,3 +24,14 @@ class card:
             return True
         else:
             return False
+        
+    def __gt__ (self, card):
+        if (self.rank > card.rank) :
+            return True
+        else:
+            return False
+        
+
+#GUI
+root = Tk()
+root.title = "Warlatro"
