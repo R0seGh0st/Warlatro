@@ -3,15 +3,15 @@ from tkinter import *
 
 #classes
 class Card:
-    suit = ["Hearts", "Dimonds", "Spades", "Clubs"]
-    rank = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
+    Suit = ["Hearts", "Dimonds", "Spades", "Clubs"]
+    Rank = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
 
     def __init__(self, s, r):
         self.suit = s
         self.rank = r
 
     def __repr__(self):
-        return f"{self.rank} of {self.suit}"
+        return "{} of {}".format(self.Rank[self.rank], self.Suit[self.suit])
     
     def __eq__(self, card):
         if (self.rank == card.rank):
@@ -75,6 +75,18 @@ class Game:
         # and loop from there until someone loses all there cards
         # just make a deal function to do the 26 split in a loop with the created deck, then deck is ignored during play
         cards = self.deck.cards
+        for i in range (0, 25):
+            self.player.collection.append(cards[i])
+        for i in range (26, 51):
+            self.computer.collection.append(cards[i])
+        #testing to see if deck is split and is random
+        for j in range (0, len(self.player.collection) - 1):
+            p = ("PLayer: {}").format(self.player.collection[j])
+            print(p)
+        for j in range (0, len(self.computer.collection) - 1):
+            p ("Computer: {}").format(self.computer.collection[j])
+            print (p)
+
         print("Begin War")
         self.player.card = self.deck.rmCard()
         self.player.collection.append(self.player.card)
@@ -89,7 +101,30 @@ class Game:
             self.draw(self.player.card, self.computer.card)
             if self.player.card > self.computer.card:
                 self.player.collection.append(self.computer.card)
+                self.player.collection.append(self.player.card)
                 self.computer.collection.remove(self.computer.card)
             elif self.player.card < self.computer.card:
                 self.computer.collection.append(self.player.card)
+                self.computer.collection.append(self.computer.card)
                 self.player.collection.remove(self.player.card)
+            #for now, if it's a tie, just add card back into deck and reshuffle    
+            elif self.player.card == self.computer.card:
+                self.computer.collection.append(self.computer.card)
+                shuffle(self.computer.collection)
+                self.player.collection.append(self.player.card)
+                shuffle(self.player.collection)
+        #END GAME/ROUND
+        if len(self.player.collection) >= 1:
+            print("Player wins!")
+            self.player.wins += 1
+        elif len(self.computer.collection) >= 1:
+            print("Computer Wins :(")
+            self.computer.wins += 1
+        
+
+
+game = Game()
+game.playGame()
+# NOTES:
+# for each new boss, randomly pick from array of effects like the blinds in balatro, i.e x1.5, 
+
