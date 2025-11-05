@@ -76,37 +76,33 @@ class Game:
         # just make a deal function to do the 26 split in a loop with the created deck, then deck is ignored during play
         cards = self.deck.cards
         for i in range (0, 25):
-            self.player.collection.append(cards[i])
-        for i in range (26, 51):
-            self.computer.collection.append(cards[i])
+            self.player.collection.append(cards.pop())
+        for i in range (0, 25):
+            self.computer.collection.append(cards.pop())
         #testing to see if deck is split and is random
         for j in range (0, len(self.player.collection) - 1):
             p = ("PLayer: {}").format(self.player.collection[j])
             print(p)
-        for j in range (0, len(self.computer.collection) - 1):
-            p ("Computer: {}").format(self.computer.collection[j])
-            print (p)
+        for y in range (0, len(self.computer.collection) - 1):
+            p = ("Computer: {}").format(self.computer.collection[y])
+            print(p)
 
-        print("Begin War")
-        self.player.card = self.deck.rmCard()
-        self.player.collection.append(self.player.card)
-        self.computer.card = self.deck.rmCard()
-        self.computer.collection.append(self.computer.card)            
-        
+        print("Begin War")           
         while (len(self.player.collection) >= 1 and len(self.computer.collection) >= 1):
-            m = "Press 'q' to quit. Any other key to play: "
-            response = input(m)
-            if response == 'q':
-                break
+            #m = "Press 'q' to quit. Any other key to play: "
+            #response = input(m)
+            #if response == 'q':
+            #    break
+            #drawing is broken right now, need to use pop for draw not the previous rmcard
+            self.player.card = self.player.collection.pop(0)
+            self.computer.card = self.computer.collection.pop(0)
             self.draw(self.player.card, self.computer.card)
             if self.player.card > self.computer.card:
                 self.player.collection.append(self.computer.card)
                 self.player.collection.append(self.player.card)
-                self.computer.collection.remove(self.computer.card)
             elif self.player.card < self.computer.card:
                 self.computer.collection.append(self.player.card)
                 self.computer.collection.append(self.computer.card)
-                self.player.collection.remove(self.player.card)
             #for now, if it's a tie, just add card back into deck and reshuffle    
             elif self.player.card == self.computer.card:
                 self.computer.collection.append(self.computer.card)
