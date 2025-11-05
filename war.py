@@ -3,7 +3,7 @@ from tkinter import *
 
 #classes
 class Card:
-    Suit = ["Hearts", "Dimonds", "Spades", "Clubs"]
+    Suit = ["Hearts", "Spades"]
     Rank = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
 
     def __init__(self, s, r):
@@ -34,7 +34,7 @@ class Card:
 class Deck:
     def __init__(self):
         self.cards = []
-        for i in range (0, 4):
+        for i in range (0, 2):
             for j in range (0, 13):
                 self.cards.append(Card(i, j))
         shuffle(self.cards)
@@ -75,9 +75,9 @@ class Game:
         # and loop from there until someone loses all there cards
         # just make a deal function to do the 26 split in a loop with the created deck, then deck is ignored during play
         cards = self.deck.cards
-        for i in range (0, 25):
+        for i in range (0, 13):
             self.player.collection.append(cards.pop())
-        for i in range (0, 25):
+        for i in range (0, 13):
             self.computer.collection.append(cards.pop())
         #testing to see if deck is split and is random
         for j in range (0, len(self.player.collection) - 1):
@@ -86,7 +86,8 @@ class Game:
         for y in range (0, len(self.computer.collection) - 1):
             p = ("Computer: {}").format(self.computer.collection[y])
             print(p)
-
+        #pot is for wars, trying to figure out what happens when it loops
+        pot = []
         print("Begin War")           
         while (len(self.player.collection) >= 1 and len(self.computer.collection) >= 1):
             #m = "Press 'q' to quit. Any other key to play: "
@@ -96,19 +97,23 @@ class Game:
             #drawing is broken right now, need to use pop for draw not the previous rmcard
             self.player.card = self.player.collection.pop(0)
             self.computer.card = self.computer.collection.pop(0)
+            pot.append(self.player.card)
+            pot.append(self.computer.card)
             self.draw(self.player.card, self.computer.card)
-            if self.player.card > self.computer.card:
-                self.player.collection.append(self.computer.card)
-                self.player.collection.append(self.player.card)
-            elif self.player.card < self.computer.card:
-                self.computer.collection.append(self.player.card)
-                self.computer.collection.append(self.computer.card)
+            if self.player.card.rank > self.computer.card.rank:
+                self.player.collection.append(pot)
+                pot = []
+            elif self.player.card.rank < self.computer.card.rank:
+                self.computer.collection.append(pot)
+                pot = []
             #for now, if it's a tie, just add card back into deck and reshuffle    
-            elif self.player.card == self.computer.card:
-                self.computer.collection.append(self.computer.card)
-                shuffle(self.computer.collection)
-                self.player.collection.append(self.player.card)
-                shuffle(self.player.collection)
+            elif self.player.card.rank == self.computer.card.rank:
+                pot.append(self.computer.card)
+                pot.append(self.player.card)
+                for i in range (0, 3):
+                    pot.append(self.computer.collection.pop(0))
+                    pot.append(self.player.collection.pop(0))
+            #in war, pot is appended and then not reset.
         #END GAME/ROUND
         if len(self.player.collection) >= 1:
             print("Player wins!")
