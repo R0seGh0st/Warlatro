@@ -79,13 +79,6 @@ class Game:
             self.player.collection.append(cards.pop())
         for i in range (0, 13):
             self.computer.collection.append(cards.pop())
-        #testing to see if deck is split and is random
-        for j in range (0, len(self.player.collection) - 1):
-            p = ("PLayer: {}").format(self.player.collection[j])
-            print(p)
-        for y in range (0, len(self.computer.collection) - 1):
-            p = ("Computer: {}").format(self.computer.collection[y])
-            print(p)
         #pot is for wars, trying to figure out what happens when it loops
         pot = []
         print("Begin War")           
@@ -101,10 +94,12 @@ class Game:
             pot.append(self.computer.card)
             self.draw(self.player.card, self.computer.card)
             if self.player.card.rank > self.computer.card.rank:
-                self.player.collection.append(pot)
+                for i in range (0, len(pot)):
+                    self.player.collection.append(pot[i])
                 pot = []
             elif self.player.card.rank < self.computer.card.rank:
-                self.computer.collection.append(pot)
+                for i in range (0, len(pot)):
+                    self.player.collection.append(pot[i])
                 pot = []
             #for now, if it's a tie, just add card back into deck and reshuffle    
             elif self.player.card.rank == self.computer.card.rank:
